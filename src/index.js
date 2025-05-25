@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import ReactDOM from 'react-dom';
 import { View } from 'react-native';
 import lottie from 'lottie-web';
+import { createRef } from 'react';
 
 class Animation extends PureComponent {
-  animationDOMNode = null;
+  theRef = createRef(null);
 
   componentDidMount() {
     this.loadAnimation(this.props);
@@ -36,7 +36,7 @@ class Animation extends PureComponent {
     }
 
     this.anim = lottie.loadAnimation({
-      container: this.animationDOMNode,
+      container: this.theRef.current,
       animationData: props.source,
       renderer: 'svg',
       loop: props.loop || false,
@@ -48,8 +48,6 @@ class Animation extends PureComponent {
       this.anim.addEventListener('complete', props.onAnimationFinish);
     }
   };
-
-  setAnimationDOMNode = (ref) => (this.animationDOMNode = ReactDOM.findDOMNode(ref));
 
   play = (...frames) => {
     if (!this.anim) {
@@ -68,7 +66,7 @@ class Animation extends PureComponent {
   };
 
   render() {
-    return <View style={this.props.style} ref={this.setAnimationDOMNode} />;
+    return <View style={this.props.style} ref={this.theRef} />;
   }
 }
 
